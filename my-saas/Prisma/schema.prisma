@@ -7,15 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String        @id @default(cuid())
-  name         String?
-  email        String        @unique
-  password     String?
-  isPremium    Boolean       @default(false)
-  createdAt    DateTime      @default(now())
-  transactions Transaction[]
-}
 
 model Transaction {
   id        String   @id @default(cuid())
@@ -27,3 +18,17 @@ model Transaction {
   meta      Json?
   createdAt DateTime @default(now())
 }
+
+model User {
+  id          String        @id @default(cuid())
+  name        String
+  email       String        @unique
+  password    String
+  isPremium   Boolean       @default(false)
+  role        String        @default("USER") // "USER" | "ADMIN"
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  transactions Transaction[]
+}
+

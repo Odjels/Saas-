@@ -1,4 +1,3 @@
-// app/api/payments/initialize/route.ts
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
@@ -6,12 +5,13 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions as any);
-    if (!session || !session.user?.email) {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id || !session.user.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { amount } = await req.json(); // amount in NGN (e.g., 1000)
+    const { amount } = await req.json();
     if (!amount || typeof amount !== 'number') {
       return NextResponse.json({ error: 'amount required' }, { status: 400 });
     }
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         email: session.user.email,
-        amount: amount * 100, // Paystack expects kobo
+        amount: amount * 100,
         callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/callback`,
       }),
     });
@@ -34,10 +34,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: data.message || 'Paystack init error' }, { status: 400 });
     }
 
-    // save transaction with status PENDING
     await prisma.transaction.create({
       data: {
-        userId: (session as any).user.id,
+        userId: session.user.id,
         reference: data.data.reference,
         amount: amount * 100,
         status: 'PENDING',
@@ -45,7 +44,10 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ authorization_url: data.data.authorization_url, reference: data.data.reference });
+    return NextResponse.json({
+      authorization_url: data.data.authorization_url,
+      reference: data.data.reference,
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

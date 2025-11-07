@@ -72,7 +72,11 @@ export default function InvoiceGenerator() {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  const updateItem = (index: number, field: keyof InvoiceItem, value: string | number) => {
+  const updateItem = (
+    index: number,
+    field: keyof InvoiceItem,
+    value: string | number
+  ) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
     setItems(newItems);
@@ -110,7 +114,7 @@ export default function InvoiceGenerator() {
       const newInvoice = await res.json();
       setInvoices([newInvoice, ...invoices]);
       setInvoiceCount(invoiceCount + 1);
-      
+
       // Reset form
       setClientName("");
       setClientEmail("");
@@ -121,21 +125,36 @@ export default function InvoiceGenerator() {
   };
 
   const downloadPDF = async (invoiceId: string) => {
-    if (!isPremium) {
-      alert("PDF download without watermark is a Premium feature!");
-      setShowUpgradeModal(true);
-      return;
-    }
+    // if (!isPremium) {
+    //   alert("PDF download without watermark is a Premium feature!");
+    //   setShowUpgradeModal(true);
+    //   return;
+    // }
 
-    const res = await fetch(`/api/invoice/download/${invoiceId}`);
-    if (res.ok) {
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `invoice-${invoiceId}.pdf`;
-      a.click();
-    }
+  //   const res = await fetch(`/api/invoice/download/${invoiceId}`);
+  //   if (res.ok) {
+  //     const blob = await res.blob();
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = `invoice-${invoiceId}.pdf`;
+  //     a.click();
+  //   }
+  // };
+
+const res = await fetch(`/api/invoice/download/${invoiceId}`);
+if (!res.ok) throw new Error("Failed to download invoice");
+
+const blob = await res.blob();
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+//a.download = `invoice-${invoiceId.invoiceNumber}.pdf`;
+a.download = `invoice-${invoiceId}.pdf`;
+document.body.appendChild(a);
+a.click();
+a.remove();
+window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -148,7 +167,9 @@ export default function InvoiceGenerator() {
               <h1 className="text-3xl font-bold">Invoice Generator</h1>
               <p className="text-gray-600 mt-1">
                 {isPremium ? (
-                  <span className="text-green-600 font-semibold">Premium Account</span>
+                  <span className="text-green-600 font-semibold">
+                    Premium Account
+                  </span>
                 ) : (
                   <span>
                     Free Account - {invoiceCount}/5 invoices used this month
@@ -181,7 +202,9 @@ export default function InvoiceGenerator() {
             <h2 className="text-xl font-bold mb-4">Create New Invoice</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Client Name</label>
+                <label className="block text-sm font-medium mb-1">
+                  Client Name
+                </label>
                 <input
                   type="text"
                   value={clientName}
@@ -192,7 +215,9 @@ export default function InvoiceGenerator() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Client Email</label>
+                <label className="block text-sm font-medium mb-1">
+                  Client Email
+                </label>
                 <input
                   type="email"
                   value={clientEmail}
@@ -204,7 +229,9 @@ export default function InvoiceGenerator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Invoice Date</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Invoice Date
+                  </label>
                   <input
                     type="date"
                     value={date}
@@ -214,7 +241,9 @@ export default function InvoiceGenerator() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Due Date</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Due Date
+                  </label>
                   <input
                     type="date"
                     value={dueDate}
@@ -233,7 +262,9 @@ export default function InvoiceGenerator() {
                       type="text"
                       placeholder="Description"
                       value={item.description}
-                      onChange={(e) => updateItem(index, "description", e.target.value)}
+                      onChange={(e) =>
+                        updateItem(index, "description", e.target.value)
+                      }
                       required
                       className="flex-1 px-3 py-2 border rounded"
                     />
@@ -241,7 +272,9 @@ export default function InvoiceGenerator() {
                       type="number"
                       placeholder="Qty"
                       value={item.quantity}
-                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(index, "quantity", Number(e.target.value))
+                      }
                       required
                       className="w-20 px-3 py-2 border rounded"
                     />
@@ -249,7 +282,9 @@ export default function InvoiceGenerator() {
                       type="number"
                       placeholder="Price"
                       value={item.price}
-                      onChange={(e) => updateItem(index, "price", Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(index, "price", Number(e.target.value))
+                      }
                       required
                       className="w-28 px-3 py-2 border rounded"
                     />
@@ -274,7 +309,9 @@ export default function InvoiceGenerator() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Notes (Optional)</label>
+                <label className="block text-sm font-medium mb-1">
+                  Notes (Optional)
+                </label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -307,18 +344,41 @@ export default function InvoiceGenerator() {
             ) : (
               <div className="space-y-3">
                 {invoices.slice(0, isPremium ? undefined : 5).map((invoice) => (
-                  <div key={invoice.id} className="border rounded p-4 hover:bg-gray-50">
+                  <div
+                    key={invoice.id}
+                    className="border rounded p-4 hover:bg-gray-50"
+                  >
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="font-semibold">{invoice.clientName}</p>
-                        <p className="text-sm text-gray-600">{invoice.invoiceNumber}</p>
+                        <p className="text-sm text-gray-600">
+                          {invoice.invoiceNumber}
+                        </p>
                         <p className="text-sm text-gray-500">
                           {new Date(invoice.date).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold">
-                          ₦{invoice.items.reduce((sum, item) => sum + item.quantity * item.price, 0).toLocaleString()}
+                          ₦
+                          {(() => {
+                            try {
+                              const items = Array.isArray(invoice.items)
+                                ? invoice.items
+                                : JSON.parse(invoice.items || "[]");
+
+                              const total = (
+                                items as { quantity: number; price: number }[]
+                              ).reduce(
+                                (sum, item) => sum + item.quantity * item.price,
+                                0
+                              );
+
+                              return total.toLocaleString();
+                            } catch {
+                              return "0";
+                            }
+                          })()}
                         </p>
                         <button
                           onClick={() => downloadPDF(invoice.id)}
@@ -348,10 +408,12 @@ export default function InvoiceGenerator() {
             <h2 className="text-2xl font-bold mb-4">Upgrade to Premium</h2>
             <div className="space-y-3 mb-6">
               <p className="flex items-center">
-                <span className="text-green-600 mr-2">✓</span> Unlimited invoices
+                <span className="text-green-600 mr-2">✓</span> Unlimited
+                invoices
               </p>
               <p className="flex items-center">
-                <span className="text-green-600 mr-2">✓</span> Watermark-free PDFs
+                <span className="text-green-600 mr-2">✓</span> Watermark-free
+                PDFs
               </p>
               <p className="flex items-center">
                 <span className="text-green-600 mr-2">✓</span> Custom branding

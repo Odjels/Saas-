@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { 
   TrendingUp, 
   FileText, 
@@ -46,7 +46,8 @@ type Analytics = {
   }>;
 };
 
-export default function Dashboard() {
+// Separate component that uses useSearchParams
+function DashboardContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -60,15 +61,17 @@ export default function Dashboard() {
       return;
     }
 
-    // Check for success/cancel from Paystack
-    if (searchParams.get("success") === "true") {
+    // Check for success/error from Paystack
+    const success = searchParams.get("success");
+    const error = searchParams.get("error");
+    
+    if (success === "true") {
       alert("🎉 Payment successful! Welcome to Premium!");
       window.history.replaceState({}, "", "/dashboard");
       window.location.reload();
     }
-    if (searchParams.get("error")) {
-      const errorType = searchParams.get("error");
-      alert(`Payment error: ${errorType}`);
+    if (error) {
+      alert(`Payment error: ${error}`);
       window.history.replaceState({}, "", "/dashboard");
     }
 
@@ -119,7 +122,14 @@ export default function Dashboard() {
     }
   };
 
-  if (status === "loading" || !analytics) return <p>Loading...</p>;
+  if (status === "loading" || !analytics) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <p className="text-xl text-gray-600">Loading...</p>
+      </div>
+    );
+  }
+  
   if (!session) return null;
 
   const { summary, monthlyRevenue, recentInvoices, topClients } = analytics;
@@ -363,5 +373,18 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense wrapper
+export default function Dashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <p className="text-xl text-gray-600">Loading dashboard...</p>
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
   );
 }

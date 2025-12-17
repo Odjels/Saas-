@@ -2,9 +2,10 @@
 // "use client";
 
 // import { useSession } from "next-auth/react";
-// import { useState, useEffect } from "react";
+// import { useState, useEffect, JSX } from "react";
 // import { useRouter } from "next/navigation";
 // import TemplateSelector from "@/components/TemplateSelector";
+// import { CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react";
 
 // type InvoiceItem = {
 //   description: string;
@@ -21,6 +22,8 @@
 //   dueDate: string;
 //   items: InvoiceItem[];
 //   notes: string;
+//   status: string;
+//   total: number;
 //   createdAt: string;
 // };
 
@@ -128,6 +131,31 @@
 //     }
 //   };
 
+//   const updateInvoiceStatus = async (invoiceId: string, newStatus: string) => {
+//     try {
+//       const res = await fetch(`/api/invoice/${invoiceId}/status`, {
+//         method: "PATCH",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ status: newStatus }),
+//       });
+
+//       if (res.ok) {
+//         // Update local state
+//         setInvoices(
+//           invoices.map((inv) =>
+//             inv.id === invoiceId ? { ...inv, status: newStatus } : inv
+//           )
+//         );
+//         alert(`Invoice marked as ${newStatus}`);
+//       } else {
+//         alert("Failed to update invoice status");
+//       }
+//     } catch (error) {
+//       console.error("Error updating status:", error);
+//       alert("An error occurred");
+//     }
+//   };
+
 //   const downloadPDF = async (invoiceId: string, template: Template) => {
 //     try {
 //       const res = await fetch(`/api/invoice/download/${invoiceId}?template=${template}`);
@@ -146,6 +174,40 @@
 //       console.error("Download error:", error);
 //       alert("Failed to download PDF. Please try again.");
 //     }
+//   };
+
+//   const getStatusBadge = (status: string) => {
+//     const badges: { [key: string]: { icon: JSX.Element; color: string; text: string } } = {
+//       PAID: {
+//         icon: <CheckCircle className="w-4 h-4" />,
+//         color: "bg-green-100 text-green-700 border-green-200",
+//         text: "Paid",
+//       },
+//       PENDING: {
+//         icon: <Clock className="w-4 h-4" />,
+//         color: "bg-yellow-100 text-yellow-700 border-yellow-200",
+//         text: "Pending",
+//       },
+//       OVERDUE: {
+//         icon: <AlertCircle className="w-4 h-4" />,
+//         color: "bg-red-100 text-red-700 border-red-200",
+//         text: "Overdue",
+//       },
+//       CANCELLED: {
+//         icon: <XCircle className="w-4 h-4" />,
+//         color: "bg-gray-100 text-gray-700 border-gray-200",
+//         text: "Cancelled",
+//       },
+//     };
+
+//     const badge = badges[status] || badges.PENDING;
+
+//     return (
+//       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${badge.color}`}>
+//         {badge.icon}
+//         {badge.text}
+//       </span>
+//     );
 //   };
 
 //   return (
@@ -347,7 +409,7 @@
 //                     key={invoice.id}
 //                     className="border rounded p-4 hover:bg-gray-50"
 //                   >
-//                     <div className="flex justify-between items-start">
+//                     <div className="flex justify-between items-start mb-3">
 //                       <div>
 //                         <p className="font-semibold">{invoice.clientName}</p>
 //                         <p className="text-sm text-gray-600">
@@ -358,47 +420,71 @@
 //                         </p>
 //                       </div>
 //                       <div className="text-right">
-//                         <p className="font-bold">
-//                           ₦
-//                           {(() => {
-//                             try {
-//                               const items = Array.isArray(invoice.items)
-//                                 ? invoice.items
-//                                 : JSON.parse(invoice.items || "[]");
-
-//                               const total = (
-//                                 items as { quantity: number; price: number }[]
-//                               ).reduce(
-//                                 (sum, item) => sum + item.quantity * item.price,
-//                                 0
-//                               );
-
-//                               return total.toLocaleString();
-//                             } catch {
-//                               return "0";
-//                             }
-//                           })()}
+//                         <p className="font-bold text-lg">
+//                           ₦{invoice.total.toLocaleString()}
 //                         </p>
-//                         <div className="mt-2 space-y-1">
-//                           <button
-//                             onClick={() => downloadPDF(invoice.id, "modern")}
-//                             className="block text-blue-600 text-xs hover:underline"
-//                           >
-//                             📄 Modern
-//                           </button>
-//                           <button
-//                             onClick={() => downloadPDF(invoice.id, "classic")}
-//                             className="block text-blue-600 text-xs hover:underline"
-//                           >
-//                             📋 Classic
-//                           </button>
-//                           <button
-//                             onClick={() => downloadPDF(invoice.id, "minimal")}
-//                             className="block text-blue-600 text-xs hover:underline"
-//                           >
-//                             ✨ Minimal
-//                           </button>
-//                         </div>
+//                         <div className="mt-1">{getStatusBadge(invoice.status)}</div>
+//                       </div>
+//                     </div>
+
+//                     {/* Status Actions */}
+//                     <div className="flex gap-2 mb-3 flex-wrap">
+//                       {invoice.status !== "PAID" && (
+//                         <button
+//                           onClick={() => updateInvoiceStatus(invoice.id, "PAID")}
+//                           className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
+//                         >
+//                           Mark Paid
+//                         </button>
+//                       )}
+//                       {invoice.status !== "PENDING" && (
+//                         <button
+//                           onClick={() => updateInvoiceStatus(invoice.id, "PENDING")}
+//                           className="text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200"
+//                         >
+//                           Mark Pending
+//                         </button>
+//                       )}
+//                       {invoice.status !== "OVERDUE" && (
+//                         <button
+//                           onClick={() => updateInvoiceStatus(invoice.id, "OVERDUE")}
+//                           className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200"
+//                         >
+//                           Mark Overdue
+//                         </button>
+//                       )}
+//                       {invoice.status !== "CANCELLED" && (
+//                         <button
+//                           onClick={() => updateInvoiceStatus(invoice.id, "CANCELLED")}
+//                           className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200"
+//                         >
+//                           Cancel
+//                         </button>
+//                       )}
+//                     </div>
+
+//                     {/* Download Options */}
+//                     <div className="border-t pt-3">
+//                       <p className="text-xs text-gray-600 mb-2">Download as:</p>
+//                       <div className="flex gap-2">
+//                         <button
+//                           onClick={() => downloadPDF(invoice.id, "modern")}
+//                           className="text-blue-600 text-xs hover:underline"
+//                         >
+//                           📄 Modern
+//                         </button>
+//                         <button
+//                           onClick={() => downloadPDF(invoice.id, "classic")}
+//                           className="text-blue-600 text-xs hover:underline"
+//                         >
+//                           📋 Classic
+//                         </button>
+//                         <button
+//                           onClick={() => downloadPDF(invoice.id, "minimal")}
+//                           className="text-blue-600 text-xs hover:underline"
+//                         >
+//                           ✨ Minimal
+//                         </button>
 //                       </div>
 //                     </div>
 //                   </div>
@@ -464,7 +550,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect, JSX } from "react";
 import { useRouter } from "next/navigation";
 import TemplateSelector from "@/components/TemplateSelector";
-import { CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, Clock, XCircle, AlertCircle, UserPlus } from "lucide-react";
 
 type InvoiceItem = {
   description: string;
@@ -486,6 +572,13 @@ type Invoice = {
   createdAt: string;
 };
 
+type Client = {
+  id: string;
+  name: string;
+  email: string;
+  company?: string;
+};
+
 type Template = "modern" | "classic" | "minimal";
 
 export default function InvoiceGenerator() {
@@ -494,8 +587,11 @@ export default function InvoiceGenerator() {
   const [isPremium, setIsPremium] = useState(false);
   const [invoiceCount, setInvoiceCount] = useState(0);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<Template>("modern");
+  const [useExistingClient, setUseExistingClient] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState("");
 
   // Form state
   const [clientName, setClientName] = useState("");
@@ -507,11 +603,12 @@ export default function InvoiceGenerator() {
   ]);
   const [notes, setNotes] = useState("");
 
-  // Fetch user status and invoices
+  // Fetch user status, invoices, and clients
   useEffect(() => {
     if (!session) return;
 
     const fetchData = async () => {
+      // Fetch invoice status
       const res = await fetch("/api/invoice/status");
       if (res.ok) {
         const data = await res.json();
@@ -519,10 +616,27 @@ export default function InvoiceGenerator() {
         setInvoiceCount(data.invoiceCount);
         setInvoices(data.invoices);
       }
+
+      // Fetch clients
+      const clientsRes = await fetch("/api/clients");
+      if (clientsRes.ok) {
+        const clientsData = await clientsRes.json();
+        setClients(clientsData);
+      }
     };
 
     fetchData();
   }, [session]);
+
+  // Handle client selection from dropdown
+  const handleClientSelect = (clientId: string) => {
+    setSelectedClientId(clientId);
+    const client = clients.find((c) => c.id === clientId);
+    if (client) {
+      setClientName(client.name);
+      setClientEmail(client.email);
+    }
+  };
 
   if (status === "loading") return <p>Loading...</p>;
   if (!session) {
@@ -584,6 +698,8 @@ export default function InvoiceGenerator() {
       // Reset form
       setClientName("");
       setClientEmail("");
+      setSelectedClientId("");
+      setUseExistingClient(false);
       setItems([{ description: "", quantity: 1, price: 0 }]);
       setNotes("");
       alert("Invoice created successfully!");
@@ -642,6 +758,7 @@ export default function InvoiceGenerator() {
         color: "bg-green-100 text-green-700 border-green-200",
         text: "Paid",
       },
+      
       PENDING: {
         icon: <Clock className="w-4 h-4" />,
         color: "bg-yellow-100 text-yellow-700 border-yellow-200",
@@ -720,6 +837,54 @@ export default function InvoiceGenerator() {
               />
 
               <div className="border-t pt-4">
+                {/* Client Selection Toggle */}
+                <div className="mb-4 bg-indigo-50 p-4 rounded-lg">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useExistingClient}
+                      onChange={(e) => {
+                        setUseExistingClient(e.target.checked);
+                        if (!e.target.checked) {
+                          setSelectedClientId("");
+                          setClientName("");
+                          setClientEmail("");
+                        }
+                      }}
+                      className="mr-2"
+                    />
+                    <span className="text-sm font-medium">Use existing client</span>
+                  </label>
+
+                  {useExistingClient && (
+                    <div className="mt-3">
+                      <select
+                        value={selectedClientId}
+                        onChange={(e) => handleClientSelect(e.target.value)}
+                        required={useExistingClient}
+                        className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-indigo-600"
+                      >
+                        <option value="">Select a client...</option>
+                        {clients.map((client) => (
+                          <option key={client.id} value={client.id}>
+                            {client.name} ({client.email})
+                            {client.company && ` - ${client.company}`}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => router.push("/clients")}
+                        className="mt-2 text-xs text-indigo-600 hover:underline flex items-center gap-1"
+                      >
+                        <UserPlus className="w-3 h-3" />
+                        Add new client
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Client Info Fields */}
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     Client Name
@@ -729,7 +894,8 @@ export default function InvoiceGenerator() {
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border rounded"
+                    disabled={useExistingClient && selectedClientId !== ""}
+                    className="w-full px-3 py-2 border rounded disabled:bg-gray-100"
                   />
                 </div>
 
@@ -742,7 +908,8 @@ export default function InvoiceGenerator() {
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border rounded"
+                    disabled={useExistingClient && selectedClientId !== ""}
+                    className="w-full px-3 py-2 border rounded disabled:bg-gray-100"
                   />
                 </div>
 
@@ -896,7 +1063,7 @@ export default function InvoiceGenerator() {
                           Mark Paid
                         </button>
                       )}
-                      {invoice.status !== "PENDING" && (
+                      {invoice.status !== "PENDING" && invoice.status !== "PAID" && (
                         <button
                           onClick={() => updateInvoiceStatus(invoice.id, "PENDING")}
                           className="text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200"
@@ -904,7 +1071,7 @@ export default function InvoiceGenerator() {
                           Mark Pending
                         </button>
                       )}
-                      {invoice.status !== "OVERDUE" && (
+                      {invoice.status !== "OVERDUE" && invoice.status !== "PAID" && (
                         <button
                           onClick={() => updateInvoiceStatus(invoice.id, "OVERDUE")}
                           className="text-xs bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200"

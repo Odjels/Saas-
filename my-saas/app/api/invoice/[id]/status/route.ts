@@ -6,9 +6,11 @@ import prisma from "@/lib/prisma";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params; // unwrap the promise
+
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -37,7 +39,7 @@ export async function PATCH(
     // Check if invoice exists and belongs to user
     const invoice = await prisma.invoice.findFirst({
       where: {
-        id: params.id,
+        id, // <-- use id here
         userId: user.id,
       },
     });
@@ -48,7 +50,7 @@ export async function PATCH(
 
     // Update invoice status
     const updatedInvoice = await prisma.invoice.update({
-      where: { id: params.id },
+      where: { id }, // <-- use id here
       data: { status },
     });
 

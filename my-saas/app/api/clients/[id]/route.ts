@@ -3,11 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 
-
+// Update client
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params; // unwrap the promise
+
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -27,7 +29,7 @@ export async function PUT(
 
     const client = await prisma.client.updateMany({
       where: {
-        id: params.id,
+        id,
         userId: user.id,
       },
       data: {
@@ -54,8 +56,10 @@ export async function PUT(
 // DELETE client
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params; // unwrap the promise
+
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -70,12 +74,16 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    await prisma.client.deleteMany({
+    const deleted = await prisma.client.deleteMany({
       where: {
-        id: params.id,
+        id,
         userId: user.id,
       },
     });
+
+    if (deleted.count === 0) {
+      return NextResponse.json({ error: "Client not found" }, { status: 404 });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

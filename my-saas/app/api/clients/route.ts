@@ -1,13 +1,28 @@
-// app/api/clients/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 
+type ClientWithInvoices = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  address: string | null;
+  company: string | null;
+  notes: string | null;
+  createdAt: Date;
+  _count: {
+    invoices: number;
+  };
+  invoices: Array<{
+    total: number;
+    status: string;
+  }>;
+};
+
 // GET all clients
-export async function GET(
-    //req: NextRequest
-) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -39,12 +54,19 @@ export async function GET(
     });
 
     // Calculate totals for each client
-    const clientsWithStats = clients.map((client) => {
-      const totalRevenue = client.invoices.reduce((sum, inv) => sum + inv.total, 0);
-      const paidInvoices = client.invoices.filter((inv) => inv.status === "PAID").length;
+    const clientsWithStats = clients.map((client: ClientWithInvoices) => {
+      const totalRevenue = client.invoices.reduce((sum: number, inv: { total: number; status: string }) => sum + inv.total, 0);
+      const paidInvoices = client.invoices.filter((inv: { total: number; status: string }) => inv.status === "PAID").length;
       
       return {
-        ...client,
+        id: client.id,
+        name: client.name,
+        email: client.email,
+        phone: client.phone,
+        address: client.address,
+        company: client.company,
+        notes: client.notes,
+        createdAt: client.createdAt.toISOString(),
         totalRevenue,
         paidInvoices,
         invoiceCount: client._count.invoices,
@@ -97,10 +119,10 @@ export async function POST(req: NextRequest) {
         userId: user.id,
         name,
         email,
-        phone,
-        address,
-        company,
-        notes,
+        phone: phone || null,
+        address: address || null,
+        company: company || null,
+        notes: notes || null,
       },
     });
 

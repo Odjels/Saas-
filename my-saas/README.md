@@ -1,25 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+My SaaS Invoicing App
 
-## Getting Started
+A modern SaaS web application for managing invoices, clients, and payments, built with Next.js, TypeScript, and Tailwind CSS. This project showcases full-stack development skills, including authentication, API development, database modeling, and third-party integrations.
 
-First, run the development server:
+Features
 
-```bash
+User Authentication & Management
+
+Sign up, login, and session management with NextAuth.js.
+
+Role-based features (Free vs Premium users).
+
+Client Management
+
+Add, update, and view client details.
+
+Track invoices per client and display top clients.
+
+Invoice Management
+
+Create, edit, and delete invoices.
+
+PDF invoice generation with multiple templates.
+
+Track invoice statuses: PAID, PENDING, OVERDUE.
+
+Payment Integration
+
+Premium subscription via Paystack.
+
+Handles success, cancellation, and error notifications.
+
+Analytics Dashboard
+
+Total revenue, pending/overdue amounts, and average invoice value.
+
+Monthly revenue trends and recent invoices.
+
+Interactive charts and statistics for business insights.
+
+Responsive UI
+
+Mobile-first design with Tailwind CSS.
+
+Modern UI components and interactive elements.
+
+Tech Stack
+Layer	Technology
+Frontend	Next.js (App Router), TypeScript, Tailwind CSS, Lucide React Icons
+Backend	Next.js API Routes, Prisma ORM, PostgreSQL
+Authentication	NextAuth.js
+Payments	Paystack API
+PDF Generation	jsPDF / Custom Templates
+Deployment	Vercel
+Getting Started
+
+Clone the repository
+
+git clone https://github.com/Odjels/my-saas.git
+cd my-saas
+
+
+Install dependencies
+
+npm install
+
+
+Set up environment variables
+
+Create a .env.local file:
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+PAYSTACK_PUBLIC_KEY=your_paystack_public_key
+PAYSTACK_SECRET_KEY=your_paystack_secret_key
+
+
+Run Prisma migrations
+
+npx prisma migrate dev
+
+
+Start the development server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000
+ to view the app.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Build for Production
+npm run build
+npm run start
 
+Key Learnings & Skills Demonstrated
+
+Building a full-stack SaaS application with modern frameworks.
+
+Implementing secure authentication and session management.
+
+Integrating payment gateways and handling subscription logic.
+
+Using Prisma for database modeling and querying.
+
+Building dynamic dashboards and interactive charts.
+
+Generating PDF invoices with multiple templates programmatically.
+
+Writing clean, maintainable TypeScript code and modular React components.
+
+Deployment
+
+Deployed easily on Vercel
+ for production-ready hosting.
+
+License
+
+MIT License © 2025 [Your Name]
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

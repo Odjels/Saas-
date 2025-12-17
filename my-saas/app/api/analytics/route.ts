@@ -1,7 +1,19 @@
+// app/api/analytics/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
+
+type InvoiceWithStatus = {
+  id: string;
+  status: string;
+  total: number;
+  date: Date;
+  dueDate: Date;
+  invoiceNumber: string;
+  clientName: string;
+  clientEmail: string;
+};
 
 export async function GET() {
   try {
@@ -26,21 +38,21 @@ export async function GET() {
 
     // Calculate analytics - ONLY use the stored status, don't auto-mark as overdue
     const totalInvoices = invoices.length;
-    const paidInvoices = invoices.filter((inv) => inv.status === "PAID").length;
-    const pendingInvoices = invoices.filter((inv) => inv.status === "PENDING").length;
-    const overdueInvoices = invoices.filter((inv) => inv.status === "OVERDUE").length;
+    const paidInvoices = invoices.filter((inv: InvoiceWithStatus) => inv.status === "PAID").length;
+    const pendingInvoices = invoices.filter((inv: InvoiceWithStatus) => inv.status === "PENDING").length;
+    const overdueInvoices = invoices.filter((inv: InvoiceWithStatus) => inv.status === "OVERDUE").length;
 
     const totalRevenue = invoices
-      .filter((inv) => inv.status === "PAID")
-      .reduce((sum, inv) => sum + inv.total, 0);
+      .filter((inv: InvoiceWithStatus) => inv.status === "PAID")
+      .reduce((sum: number, inv: InvoiceWithStatus) => sum + inv.total, 0);
 
     const pendingAmount = invoices
-      .filter((inv) => inv.status === "PENDING")
-      .reduce((sum, inv) => sum + inv.total, 0);
+      .filter((inv: InvoiceWithStatus) => inv.status === "PENDING")
+      .reduce((sum: number, inv: InvoiceWithStatus) => sum + inv.total, 0);
 
     const overdueAmount = invoices
-      .filter((inv) => inv.status === "OVERDUE")
-      .reduce((sum, inv) => sum + inv.total, 0);
+      .filter((inv: InvoiceWithStatus) => inv.status === "OVERDUE")
+      .reduce((sum: number, inv: InvoiceWithStatus) => sum + inv.total, 0);
 
     // Monthly revenue (last 6 months)
     const monthlyRevenue = [];
@@ -49,12 +61,12 @@ export async function GET() {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
       
-      const monthInvoices = invoices.filter((inv) => {
+      const monthInvoices = invoices.filter((inv: InvoiceWithStatus) => {
         const invDate = new Date(inv.date);
         return invDate >= monthStart && invDate <= monthEnd && inv.status === "PAID";
       });
       
-      const revenue = monthInvoices.reduce((sum, inv) => sum + inv.total, 0);
+      const revenue = monthInvoices.reduce((sum: number, inv: InvoiceWithStatus) => sum + inv.total, 0);
       
       monthlyRevenue.push({
         month: monthStart.toLocaleDateString("en-US", { month: "short", year: "numeric" }),
@@ -64,7 +76,7 @@ export async function GET() {
     }
 
     // Recent invoices (last 5)
-    const recentInvoices = invoices.slice(0, 5).map((inv) => ({
+    const recentInvoices = invoices.slice(0, 5).map((inv: InvoiceWithStatus) => ({
       id: inv.id,
       invoiceNumber: inv.invoiceNumber,
       clientName: inv.clientName,
@@ -77,7 +89,7 @@ export async function GET() {
     // Top clients by revenue
     const clientRevenue = new Map<string, { name: string; revenue: number; count: number }>();
     
-    invoices.forEach((inv) => {
+    invoices.forEach((inv: InvoiceWithStatus) => {
       if (inv.status === "PAID") {
         const existing = clientRevenue.get(inv.clientEmail) || { 
           name: inv.clientName, 

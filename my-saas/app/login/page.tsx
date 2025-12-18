@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FileText, Mail, Lock } from "lucide-react";
+import { loginSchema } from "@/lib/validations";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,11 +20,20 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // 1. Zod Validation
+    const validation = loginSchema.safeParse(form);
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
+
     const res = await signIn("credentials", {
-      email: form.email,
-      password: form.password,
+      ...validation.data,
       redirect: false,
     });
+
 
     if (res?.error) {
       setError("Invalid email or password");

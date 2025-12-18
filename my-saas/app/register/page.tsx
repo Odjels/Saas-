@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import { FileText, Mail, Lock, User } from "lucide-react";
+import { registerSchema } from "@/lib/validations";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,11 +17,20 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // 1. Client-side Zod Validation
+    const validation = registerSchema.safeParse(form);
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(validation.data),
       });
       
       const data = await res.json();

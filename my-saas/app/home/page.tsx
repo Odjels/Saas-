@@ -273,7 +273,7 @@ export default function LandingPage() {
               <Zap className="w-5 h-5 text-green-500 mr-2" /> Unlimited Invoices
             </li>
             <li className="flex items-center text-gray-600">
-              <Zap className="w-5 h-5 text-green-500 mr-2" /> 3 Professional
+              <Zap className="w-5 h-5 text-green-500 mr-2" />  Professional
               Templates
             </li>
             <li className="flex items-center text-gray-600">

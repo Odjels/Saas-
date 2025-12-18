@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"; // Added Viewport for Next.js 15
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./provider";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,18 +28,20 @@ export const metadata: Metadata = {
     default: "InvoiceGen - Professional SaaS Invoice Generator",
     template: "%s | InvoiceGen", // Dynamic titles for other pages
   },
-  description: "Create, manage, and track professional invoices in seconds. Secure payments via Paystack.",
+  description:
+    "Create, manage, and track professional invoices in seconds. Secure payments via Paystack.",
   keywords: ["SaaS", "Invoicing", "Paystack", "Business Tools"],
-  
+
   // Open Graph (LinkedIn, Facebook, Discord)
   openGraph: {
     title: "InvoiceGen - Smart Invoicing for Modern Businesses",
-    description: "The fastest way to get paid. Integrated with Paystack for seamless transactions.",
+    description:
+      "The fastest way to get paid. Integrated with Paystack for seamless transactions.",
     url: "https://saas-invoice-generator-pi.vercel.app",
     siteName: "InvoiceGen",
     images: [
       {
-        url: "/og-image.png", // Make sure to add an image to your /public folder!
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "InvoiceGen App Screenshot",
@@ -70,8 +73,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Providers>
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

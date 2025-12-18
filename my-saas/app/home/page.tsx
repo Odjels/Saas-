@@ -1,4 +1,4 @@
-import { FileText, Zap, Shield, TrendingUp, Palette } from 'lucide-react';
+import { FileText, Zap, Shield, TrendingUp, Palette } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -14,10 +14,16 @@ export default function LandingPage() {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/login" className="text-gray-600 hover:text-gray-900 font-medium transition">
+              <a
+                href="/login"
+                className="text-gray-600 hover:text-gray-900 font-medium transition"
+              >
                 Login
               </a>
-              <a href="/register" className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all">
+              <a
+                href="/register"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all"
+              >
                 Get Started
               </a>
             </div>
@@ -35,11 +41,15 @@ export default function LandingPage() {
             </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Streamline your billing process with our intuitive invoice generator. 
-            Choose from 3 professional templates designed for freelancers, small businesses, and enterprises.
+            Streamline your billing process with our intuitive invoice
+            generator. Choose from 3 professional templates designed for
+            freelancers, small businesses, and enterprises.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/register" className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all">
+            <a
+              href="/register"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all"
+            >
               Start Free Trial
             </a>
           </div>
@@ -56,7 +66,8 @@ export default function LandingPage() {
             Choose Your Perfect Template
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Select from three professionally designed invoice templates that match your brand and business style
+            Select from three professionally designed invoice templates that
+            match your brand and business style
           </p>
         </div>
 
@@ -79,15 +90,21 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-              
+
               <h3 className="text-xl font-bold text-gray-900 mb-2">Modern</h3>
               <p className="text-gray-600 text-sm mb-3">
                 Eye-catching gradient design with vibrant colors
               </p>
               <div className="flex flex-wrap gap-1">
-                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">Contemporary</span>
-                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">Colorful</span>
-                <span className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full">Tech-savvy</span>
+                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                  Contemporary
+                </span>
+                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                  Colorful
+                </span>
+                <span className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full">
+                  Tech-savvy
+                </span>
               </div>
             </div>
           </div>
@@ -98,7 +115,9 @@ export default function LandingPage() {
               {/* Template Preview */}
               <div className="bg-white rounded-lg shadow-lg p-4 mb-4 h-48 flex flex-col border-2 border-gray-800">
                 <div className="border-b-2 border-gray-800 pb-2 mb-2">
-                  <span className="text-gray-900 font-bold text-sm">INVOICE</span>
+                  <span className="text-gray-900 font-bold text-sm">
+                    INVOICE
+                  </span>
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="space-y-1 border-b border-gray-300 pb-2">
@@ -110,15 +129,21 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-              
+
               <h3 className="text-xl font-bold text-gray-900 mb-2">Classic</h3>
               <p className="text-gray-600 text-sm mb-3">
                 Traditional business style with elegant borders
               </p>
               <div className="flex flex-wrap gap-1">
-                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">Professional</span>
-                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">Formal</span>
-                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">Corporate</span>
+                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                  Professional
+                </span>
+                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                  Formal
+                </span>
+                <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                  Corporate
+                </span>
               </div>
             </div>
           </div>
@@ -129,7 +154,9 @@ export default function LandingPage() {
               {/* Template Preview */}
               <div className="bg-white rounded-lg shadow-lg p-4 mb-4 h-48 flex flex-col">
                 <div className="mb-2">
-                  <span className="text-gray-800 font-bold text-lg">Invoice</span>
+                  <span className="text-gray-800 font-bold text-lg">
+                    Invoice
+                  </span>
                   <div className="h-px bg-gray-300 mt-1"></div>
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
@@ -142,15 +169,21 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-              
+
               <h3 className="text-xl font-bold text-gray-900 mb-2">Minimal</h3>
               <p className="text-gray-600 text-sm mb-3">
                 Clean and simple design for maximum clarity
               </p>
               <div className="flex flex-wrap gap-1">
-                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">Elegant</span>
-                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">Simple</span>
-                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">Modern</span>
+                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">
+                  Elegant
+                </span>
+                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">
+                  Simple
+                </span>
+                <span className="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded-full">
+                  Modern
+                </span>
               </div>
             </div>
           </div>
@@ -158,9 +191,13 @@ export default function LandingPage() {
 
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">
-            All templates available with Premium • Watermark-free PDFs • Instant downloads
+            All templates available with Premium • Watermark-free PDFs • Instant
+            downloads
           </p>
-          <a href="/register" className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+          <a
+            href="/register"
+            className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+          >
             Try All Templates Free
           </a>
         </div>
@@ -173,9 +210,12 @@ export default function LandingPage() {
             <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
               <Zap className="w-6 h-6 text-indigo-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Lightning Fast</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Lightning Fast
+            </h3>
             <p className="text-gray-600">
-              Generate invoices in seconds with our streamlined workflow. No more tedious manual entry.
+              Generate invoices in seconds with our streamlined workflow. No
+              more tedious manual entry.
             </p>
           </div>
 
@@ -183,9 +223,12 @@ export default function LandingPage() {
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Secure & Reliable</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Secure & Reliable
+            </h3>
             <p className="text-gray-600">
-              Your data is encrypted and protected with enterprise-grade security standards.
+              Your data is encrypted and protected with enterprise-grade
+              security standards.
             </p>
           </div>
 
@@ -193,11 +236,59 @@ export default function LandingPage() {
             <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6 text-pink-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Track Performance</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Track Performance
+            </h3>
             <p className="text-gray-600">
-              Monitor your invoices, payments, and business growth with detailed analytics.
+              Monitor your invoices, payments, and business growth with detailed
+              analytics.
             </p>
           </div>
+        </div>
+      </section>
+
+     
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Simple, Transparent Pricing
+          </h2>
+          <p className="text-gray-600">
+            Everything you need to get paid faster.
+          </p>
+        </div>
+        <div className="max-w-md mx-auto bg-white rounded-3xl shadow-2xl border-2 border-indigo-600 p-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-indigo-600 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
+            POPULAR
+          </div>
+          <h3 className="text-2xl font-bold mb-2">Premium Plan</h3>
+          <div className="flex items-baseline mb-6">
+            <span className="text-5xl font-extrabold text-gray-900">
+              ₦5,000
+            </span>
+            <span className="text-gray-500 ml-2">/one-time</span>
+          </div>
+          <ul className="space-y-4 mb-8">
+            <li className="flex items-center text-gray-600">
+              <Zap className="w-5 h-5 text-green-500 mr-2" /> Unlimited Invoices
+            </li>
+            <li className="flex items-center text-gray-600">
+              <Zap className="w-5 h-5 text-green-500 mr-2" /> 3 Professional
+              Templates
+            </li>
+            <li className="flex items-center text-gray-600">
+              <Zap className="w-5 h-5 text-green-500 mr-2" /> No Watermarks
+            </li>
+            <li className="flex items-center text-gray-600">
+              <Zap className="w-5 h-5 text-green-500 mr-2" /> PDF Exports
+            </li>
+          </ul>
+          <a
+            href="/register"
+            className="block text-center bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition"
+          >
+            Get Started Now
+          </a>
         </div>
       </section>
 
@@ -210,26 +301,14 @@ export default function LandingPage() {
           <p className="text-indigo-100 text-lg mb-8">
             Join thousands of businesses already using InvoiceFlow
           </p>
-          <a href="/register" className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all inline-block">
+          <a
+            href="/register"
+            className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition-all inline-block"
+          >
             Get Started Free
           </a>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t bg-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <FileText className="w-6 h-6 text-indigo-600" />
-              <span className="text-xl font-bold text-gray-900">InvoiceFlow</span>
-            </div>
-            <p className="text-gray-600 text-sm">
-              © 2025 InvoiceFlow. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

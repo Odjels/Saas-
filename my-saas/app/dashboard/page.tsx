@@ -103,7 +103,7 @@ function DashboardContent() {
   const handleUpgrade = async () => {
   setLoading(true);
   try {
-    const res = await fetch("/api/paystack/initialize", {
+    const res = await fetch("/api/payments/initialize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: 5000 }),

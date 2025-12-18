@@ -15,7 +15,7 @@ export default function Footer() {
               © {new Date().getFullYear()} <span className="font-semibold">InvoiceFlow</span>. All rights reserved.
             </p>
             <p className="text-gray-400 text-xs mt-1">
-              Designed & Developed by <span className="text-gray-700 font-medium">Odegua</span>
+              Designed & Developed by <span className="text-gray-700 font-medium">Odegua Osajele </span>
             </p>
           </div>
         </div>

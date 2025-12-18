@@ -101,26 +101,29 @@ function DashboardContent() {
   };
 
   const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/paystack/initialize", {
-        method: "POST",
-      });
-      
-      if (res.ok) {
-        const { authorization_url } = await res.json();
-        window.location.href = authorization_url;
-      } else {
-        const data = await res.json();
-        alert(data.error || "Failed to initialize payment");
-      }
-    } catch (error) {
-      console.error("Upgrade error:", error);
-      alert("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const res = await fetch("/api/paystack/initialize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: 5000 }),
+    });
+
+    if (res.ok) {
+      const { authorizationUrl } = await res.json();
+      window.location.href = authorizationUrl;
+    } else {
+      const data = await res.json();
+      alert(data.error || "Failed to initialize payment");
     }
-  };
+  } catch (error) {
+    console.error("Upgrade error:", error);
+    alert("An error occurred. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (status === "loading" || !analytics) {
     return (
